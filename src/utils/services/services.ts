@@ -10,3 +10,9 @@ export const revalidate = (path: string) => {
 export const redirectTo = (path: string) => {
     redirect(path);
 }
+
+
+export const getDBResponse = (documents: any) => {
+    console.log(documents);
+    return documents.map((document: any) => ({...document, _id: String(document._id)}));
+}

@@ -32,7 +32,7 @@ const CategoryRow = ({category, index}: {category: {name: string, description: s
     }, [state])
 
   return (
-    <tr key={index} className="text-txtLightSecondary dark:text-txtDarkSecondary even:bg-bgLightPrimary even:dark:bg-bgDarkPrimary">
+    <tr className="text-txtLightSecondary dark:text-txtDarkSecondary even:bg-bgLightPrimary even:dark:bg-bgDarkPrimary">
     <td className="px-3"> {index+1} </td>
     <td className="flex gap-3 items-center py-2">
         <Image src={category.image || ""} alt="" width={28} height={28} className="object-cover rounded-full w-8 h-8" />
@@ -44,7 +44,7 @@ const CategoryRow = ({category, index}: {category: {name: string, description: s
     <th className="flex gap-2 items-center text-lg ">
         <Link href={`/dashboard/category/update/${category.slug}`} className="text-green-500"> <FaRegEdit /> </Link>
         <form action={formAction} className="flex items-center">
-            <input type="text" hidden name="slug" value={category.slug} />
+            <input type="text" hidden name="slug" value={category.slug} readOnly />
             <button className="text-red-500"> <RiDeleteBin6Line /> </button>
         </form>
     </th>

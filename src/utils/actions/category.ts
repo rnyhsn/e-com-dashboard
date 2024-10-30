@@ -4,17 +4,17 @@ import { connectToDB } from "../db";
 import { Category } from "../models/category";
 import { slugify } from "../services/createSlug";
 import { deleteImage, uploadImage } from "../services/uploadImage";
+import { Product } from "../models/product";
+import { redirectTo, revalidate } from "../services/services";
 
 
 export const createCategory = async (prevState: any, formData: FormData) => {
     const {name, description, file} = Object.fromEntries(formData);
-    console.log(name, description);
-    console.log("File", file);
     try {
         await connectToDB();
         const slug = slugify(name.toString());
         
-        // console.log(file instanceof File);
+   
         let image: any;
         if(file instanceof File && file.size > 0) {
             if(file.type.startsWith("image/")) {
@@ -27,9 +27,7 @@ export const createCategory = async (prevState: any, formData: FormData) => {
             }
            
         }
-        console.log("Image:", image);
-        
-        console.log(image);
+  
         const result = await Category.create({
             name,
             slug,
@@ -37,8 +35,7 @@ export const createCategory = async (prevState: any, formData: FormData) => {
             image: image?.secure_url,
             image_public_id: image?.public_id
         });
-
-        console.log(result);
+ 
         return {
             success: true,
             message: "Category Created successfully"
@@ -55,8 +52,10 @@ export const createCategory = async (prevState: any, formData: FormData) => {
 export const getCategories = async () => {
     try {
         await connectToDB();
-        const categories = await Category.find();
-
+        let categories = await Category.find().lean();
+        
+        categories = categories.map((category) => ({...category, _id: String(category._id)}));
+       
         return {
             success: true,
             message: "Categories Fetched",
@@ -117,8 +116,8 @@ export const updateCategory = async (prevState: any, formData: FormData) => {
                 throw new Error("File type png, jpg & jpeg are allowed only");
             }
 
-            if(file.size > 2*1024*1024) {
-                throw new Error("File size does not exceed 2MB");
+            if(file.size > 4*1024*1024) {
+                throw new Error("File size does not exceed 4MB");
             }
 
             const image_public_id = category.image_public_id
@@ -182,14 +181,22 @@ export const deleteCategory = async (prevState: any, formData: FormData) => {
 
         await Category.findOneAndDelete({slug});
 
-        return {
-            success: true,
-            message: "Category deleted successfully"
-        }
+        /// find all product with the category and delete them
+        const products: any = Product.find({category: category._id});
+        products.forEach((product: any) => (
+            product.images_public_id.forEach(async (publicKey: string) => {
+                await deleteImage(publicKey);
+            })
+        ))
+
+        await Product.deleteMany({category: category._id});
+        
     } catch (error: any) {
         return {
             success: false,
             messsage: error.message
         }
     }
+    revalidate("/dashboard/category");
+    redirectTo("/dashboard/category");
 }

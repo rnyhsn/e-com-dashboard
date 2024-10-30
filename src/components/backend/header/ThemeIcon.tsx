@@ -7,7 +7,6 @@ import { IoSunnyOutline } from 'react-icons/io5'
 const ThemeIcon = () => {
   
   const theme = useContext(ThemeContext);
-  console.log(theme)
   return (
     <div>
     {

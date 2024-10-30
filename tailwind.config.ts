@@ -17,7 +17,7 @@ const config: Config = {
   			txtDarkPrimary: '#FFFFFF',
   			txtDarkSecondary: '#A0A086',
   			bgLightPrimary: '#ffffff',
-  			bgLightSecondary: '#dfe4ea',
+  			bgLightSecondary: '#F5F5F5',
   			txtLightPrimary: '#020617',
   			txtLightSecondary: '#1F2937',
   			btnBg: '#A9DFD8',
@@ -30,7 +30,7 @@ const config: Config = {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
+  				DEFAULT: '#7FAD39',
   				foreground: 'hsl(var(--primary-foreground))'
   			},
   			secondary: {

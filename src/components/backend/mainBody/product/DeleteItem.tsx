@@ -12,7 +12,7 @@ const DeleteItem = ({action, id}: {action: (prev: {success: boolean|string, mess
     }
     const [state, formAction] = useFormState(action, initialState)
     console.log(state);
-    if(state.success === false) {
+    if(state?.success === false) {
         toast.error(state.message);
     } 
   return (

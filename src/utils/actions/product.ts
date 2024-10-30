@@ -66,7 +66,9 @@ export const createProduct = async (formData: FormData) => {
 
 export const getProducts = async () => {
     try {
-        const products = await Product.find().populate('category');
+        let products = await Product.find().populate('category').lean();
+
+        products = products.map((product: any) => ({...product, _id: String(product._id)}))
 
         if(products.length === 0) {
             return {
@@ -179,7 +181,10 @@ export const deleteProduct = async (prev: {success: boolean|string, message: str
         } else {
             throw new Error("Product not found");
         }
-        
+        // return {
+        //     success: true,
+        //     message: "Product deleted successfully"
+        // }
     } catch (error: any) {
         return {
             success: false,

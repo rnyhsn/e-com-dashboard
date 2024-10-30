@@ -26,8 +26,8 @@ const CategoryAddForm = () => {
         if(e.target.files) {
             const file = e.target.files[0];
             console.log(file);
-            if(file.size > 2*1024*1024) {
-                setUploadWarning("File size must not exceed 2MB");
+            if(file.size > 4*1024*1024) {
+                setUploadWarning("File size must not exceed 4MB");
             } else {
                 if(file.type.startsWith("image/")) {
                     setImagePreviewUrl(URL.createObjectURL(file));

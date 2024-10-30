@@ -1,7 +1,6 @@
 import { deleteProduct, getProducts } from '@/utils/actions/product'
 import Image from 'next/image'
 import { FaRegEdit } from 'react-icons/fa'
-import { RiDeleteBin6Line } from 'react-icons/ri'
 import ItemNotFound from '../ItemNotFound'
 import DeleteItem from './DeleteItem'
 import Link from 'next/link'
@@ -31,7 +30,7 @@ const ProductTable =async () => {
             </thead>
             <tbody>
             {
-            resp.payload  && resp.payload.map((product, index) => (
+              resp.success && Array.isArray(resp.payload) && resp.payload?.map((product, index) => (
 
               <tr key={index} className="text-txtLightSecondary dark:text-txtDarkSecondary odd:bg-bgLightPrimary odd:dark:bg-bgDarkPrimary">
                 <td> {index+1} </td>
@@ -44,13 +43,13 @@ const ProductTable =async () => {
                 </td>
                 <td> {product.shortDesc?.substr(0, 20) || product.description?.substr(0,20)} ... </td>
                 <td> {product.sellingPrice? product.sellingPrice : product.price} <span className="text-[10px] line-through"> ({product.sellingPrice && product.price}) </span>   </td>
-                <td> {product.category.name} </td>
+                <td> {product.category?.name} </td>
                 <td> {product?.stock} </td>
                 <td className="text-xs"> {product?.colors.map((color: string) => <span key={color}> {color}, </span>)}  </td>
                 <td className="text-xs"> {product?.sizes.map((size: string) => <span> {size}, </span>)}  </td>
                 <th className="flex gap-2 items-center text-lg">
                   <Link href={`/dashboard/product/update/${product.slug}`} className="text-green-500"> <FaRegEdit /> </Link>
-                  <DeleteItem action={deleteProduct} id={product._id.toString()} />
+                  <DeleteItem action={deleteProduct} id={String(product._id)} />
                 </th>
               </tr>
             ))

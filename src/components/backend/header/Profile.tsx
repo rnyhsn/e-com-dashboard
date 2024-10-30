@@ -21,7 +21,6 @@ import { redirectTo } from '@/utils/services/services'
 
 const Profile = async () => {
   const session = await auth();
-  console.log(session);
   const handleLogout = async () => {
     'use server';
     await signOut();

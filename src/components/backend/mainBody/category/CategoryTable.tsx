@@ -23,7 +23,7 @@ const CategoryTable = async () => {
       <tbody>
       {
         result.success && result?.payload && result.payload.map((category, index) => (
-            <CategoryRow category={category} index={index} />
+            <CategoryRow category={category} key={index} index={index} />
         )) 
       }
         
